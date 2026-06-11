@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -628,7 +629,7 @@ export default function App() {
             </DialogTitle>
           </DialogHeader>
           <div className="prose prose-invert prose-sm min-h-0 max-w-none flex-1 overflow-y-auto prose-headings:font-semibold">
-            <ReactMarkdown>{detail?.summary ?? ''}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{detail?.summary ?? ''}</ReactMarkdown>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-2 border-t pt-3">
             {notionUrl && (
