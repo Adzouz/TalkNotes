@@ -14,6 +14,10 @@ export interface Chunk {
   text: string
 }
 
+export interface AppConfig {
+  notion: boolean
+}
+
 export interface SessionDetail {
   meta: SessionMeta
   transcript: Chunk[]

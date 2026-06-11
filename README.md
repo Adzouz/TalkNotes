@@ -92,8 +92,16 @@ List devices: `ffmpeg -f avfoundation -list_devices true -i ""`
 
 ## Publish to Notion (optional)
 
-1. Create an internal integration at [notion.so/my-integrations](https://www.notion.so/my-integrations)
-   and copy its secret.
+The "Publish to Notion" button only appears in the summary dialog once both env vars below
+are set — without them the feature is hidden entirely.
+
+> Creating a connection requires **workspace owner** rights in Notion. On a work
+> workspace where you're a regular member, either ask an owner to create it for you,
+> or use a personal workspace.
+
+1. Create a connection at [notion.so/my-integrations](https://www.notion.so/my-integrations)
+   → New connection → auth method **Access token** (not OAuth) → select workspace → copy
+   the `ntn_…` secret.
 2. In Notion, open the page that should hold the summaries → ⋯ menu → Connections →
    add your integration.
 3. Copy the page id (the 32-char hex part of the page URL) and create `app/.env`:

@@ -20,6 +20,7 @@ import { NotesEditor } from '@/components/NotesEditor'
 import {
   api,
   json,
+  type AppConfig,
   type SessionDetail,
   type SessionMeta,
   type SessionStatus,
@@ -139,6 +140,7 @@ export default function App() {
   const [micLevel, setMicLevel] = useState<number | null>(null)
   const [publishing, setPublishing] = useState(false)
   const [notionUrl, setNotionUrl] = useState<string | null>(null)
+  const [config, setConfig] = useState<AppConfig>({ notion: false })
   const transcriptRef = useRef<HTMLDivElement>(null)
   const photoInputRef = useRef<HTMLInputElement>(null)
 
@@ -152,8 +154,9 @@ export default function App() {
     setDetail(await api<SessionDetail>(`/sessions/${id}`))
   }, [])
 
-  // load list and auto-open the most recent session
+  // load config + session list, auto-open the most recent session
   useEffect(() => {
+    api<AppConfig>('/config').then(setConfig)
     api<SessionMeta[]>('/sessions').then((list) => {
       setSessions(list)
       if (list.length > 0) openSession(list[0].id)
@@ -645,15 +648,17 @@ export default function App() {
             >
               <Download className="size-3.5" /> Save .md
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={publishing || !!notionUrl}
-              onClick={publishNotion}
-            >
-              <Send className="size-3.5" />
-              {notionUrl ? 'Published ✓' : publishing ? 'Publishing…' : 'Publish to Notion'}
-            </Button>
+            {config.notion && (
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={publishing || !!notionUrl}
+                onClick={publishNotion}
+              >
+                <Send className="size-3.5" />
+                {notionUrl ? 'Published ✓' : publishing ? 'Publishing…' : 'Publish to Notion'}
+              </Button>
+            )}
             <Button variant="outline" size="sm" disabled={summarizing} onClick={runSummarize}>
               <Sparkles className={`size-3.5 ${summarizing ? 'animate-pulse' : ''}`} />
               {summarizing ? 'Regenerating…' : 'Regenerate'}

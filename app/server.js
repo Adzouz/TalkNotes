@@ -306,6 +306,13 @@ const upload = multer({
   }),
 })
 
+app.get('/api/config', (_req, res) =>
+  res.json({
+    // feature flags driven by env — see README "Publish to Notion"
+    notion: Boolean(process.env.NOTION_TOKEN && process.env.NOTION_PARENT_PAGE_ID),
+  }),
+)
+
 app.get('/api/sessions', (_req, res) => res.json(listSessions()))
 
 app.post('/api/sessions', (req, res) => {
