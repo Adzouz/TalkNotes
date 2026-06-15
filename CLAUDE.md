@@ -10,6 +10,13 @@ Local-first conference talk recorder: ffmpeg → whisper.cpp → SSE → React U
 - `sessions/<id>/` — runtime data (gitignored): meta.json, audio/seg-\*.wav, transcript.jsonl, notes.md, photos/, summary.md
 - `models/` — whisper ggml models (gitignored); server picks best from `MODEL_PREFERENCE`
 
+## Skills
+
+- **dev** — safely rebuild the UI and restart the server (guards against restarting mid-recording).
+  Use after any `app/ui/src` or `app/server.js` change.
+- **verify-ui** — drive the running app with a real browser to screenshot desktop/mobile and
+  report JS errors + overflow. Use to confirm UI changes.
+
 ## Commands
 
 - `npm start` — run server on :3033 (serves `app/ui/dist`)
