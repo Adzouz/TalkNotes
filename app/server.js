@@ -260,17 +260,39 @@ const SUMMARY_PROMPT =
   'takes, and action items worth trying later. The transcript and notes follow on stdin.'
 
 function summarize(id, cb) {
+  const context = buildContext(id)
+  if (!readTranscript(id).length && !readNotes(id).trim()) {
+    return cb(new Error('Nothing to summarize yet — record a transcript or write notes first.'))
+  }
   const proc = spawn('claude', ['-p', SUMMARY_PROMPT])
   let out = ''
   let err = ''
   proc.stdout.on('data', (d) => (out += d))
   proc.stderr.on('data', (d) => (err += d))
+  // spawn failure (claude missing from PATH, etc.) — must be handled or it throws
+  proc.on('error', (e) =>
+    cb(
+      new Error(
+        e.code === 'ENOENT'
+          ? 'The `claude` CLI was not found on PATH. Install Claude Code and restart the server.'
+          : `Failed to run claude: ${e.message}`,
+      ),
+    ),
+  )
   proc.on('close', (code) => {
-    if (code !== 0) return cb(new Error(err || `claude exited ${code}`))
+    if (code !== 0) {
+      // claude often writes the real reason to stdout, not stderr
+      const detail = (err || out).trim().slice(0, 500)
+      return cb(
+        new Error(detail || `claude exited ${code} (no output — check your Claude login/usage)`),
+      )
+    }
+    if (!out.trim()) return cb(new Error('claude returned an empty summary — try Regenerate.'))
     fs.writeFileSync(path.join(SESSIONS_DIR, id, 'summary.md'), out)
     cb(null, out)
   })
-  proc.stdin.write(buildContext(id))
+  proc.stdin.on('error', () => {}) // ignore EPIPE if claude exits early
+  proc.stdin.write(context)
   proc.stdin.end()
 }
 

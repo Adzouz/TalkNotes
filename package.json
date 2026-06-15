@@ -1,5 +1,5 @@
 {
-  "name": "livetranscript",
+  "name": "talknotes",
   "version": "0.1.0",
   "private": true,
   "description": "Record conference talks, transcribe locally with whisper.cpp, take rich notes, and summarize with Claude.",

@@ -1,4 +1,4 @@
-# LiveTranscript — project notes for Claude
+# TalkNotes — project notes for Claude
 
 Local-first conference talk recorder: ffmpeg → whisper.cpp → SSE → React UI, summaries via `claude -p`.
 

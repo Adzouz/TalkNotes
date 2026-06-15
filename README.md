@@ -1,4 +1,4 @@
-# LiveTranscript 🎙️
+# TalkNotes 🎙️
 
 Record conference talks, transcribe them **locally** in near-real-time with whisper.cpp, take rich
 markdown notes and slide photos alongside, then generate an AI summary at the end. Built to survive
